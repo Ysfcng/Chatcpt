@@ -1,0 +1,78 @@
+<html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
+<body>
+
+<form id="form">
+<div>
+<input placeholder="isim yaz" id="text"  type="text" />
+<input placeholder="isim yaz" id="email" type="email" />
+</div>
+<input type="radio" value="kullanici ekle" id="add" placeholder="ekle" name="operation" />
+<label for="add">ekle</label>
+<input type="radio" value="kullanici sil" id="remove" name="operation" />
+<label for="remove">sil</label>
+<input type="radio" value="kullanici guncelle" id="update" name="operation" />
+<label for="update">guncelle</label>
+
+<input type="radio" value="kullanici listele" id="list" name="operation" />
+<label for="list">listele</label>
+
+<button id="button" type="submit">gonder</button>
+</form>
+<p></p>
+
+<script>
+let $ = document.querySelector;
+let email = document.querySelector("#email")||1;
+
+let form = document.querySelector("#form");
+let Name = document.querySelector("#text");
+let add = document.querySelector("#add");
+let remove = document.querySelector("#remove");
+let list = document.querySelector("#list");
+let update = document.querySelector("#update");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let result;
+
+
+  if (list.checked) {
+    let res = await fetch("http://localhost:3000/users");
+    result = await res.json();
+  }
+
+  if (add.checked) {
+    let res = await fetch("http://localhost:3000/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: Name.value, email: email.value })
+    });
+    result = await res.json();
+  }
+
+  if (update.checked) {
+    let res = await fetch("http://localhost:3000/users", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: Name.value, email: email.value })
+    });
+    result = await res.json();
+  }
+
+  if (remove.checked) {
+    let res = await fetch("http://localhost:3000/users", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: Name.value })
+    });
+    result = await res.json();
+  }
+
+  document.querySelector("p").innerHTML = result.message || result.error || JSON.stringify(result);
+});
+</script>
+
+
+</body>
+</html>
