@@ -5,64 +5,54 @@ const db=require("../db.js")
 
 
 
-router.get("/users",(req,res)=>{
-db.all("SELECT * FROM USERS",(err,rows)=>{
-if(err){
-res.status(500).json({"error":err.message})
-}
-res.json({rows})
-
-
-})
+router.get("/",async (req,res)=>{
+await db.read()
+res.json(db.data.users)
 })
 
-
-router.post("/users",(req,res)=>{
+router.post("/",async (req,res)=>{
 let name=req.body.name
 let email=req.body.email
 
+console.log(req.body)
 if(!email||!name){
 res.status(400).json({error:"isim ve email zorunlu"})
 }
 
-const sql="INSERT INTO users (name,email) Values (?,?)"
+await db.read()
+db.data.users.push({"id":Date.now().toString(),name,email})
+await db.write()
 
-db.run(sql,(err)=>{
-if(err){
-res.status(500).json({error:err.message})
-}
-res.json({message:"kullanici eklendi"})
-
-})
-
-})
-
-router.put("/users",(req,res)=>{
-const {email,name,id}=req.body
-
-const sql="UODATE users SET  name = ? email = ? WHERE id = ?"
-
-db.run(sql,[name ,email,id],(err)=>{
-if(err)
-res.status(500).json({error:err.message})
-
-res.status(200).json({message:"kullanici guncellendi"})
-})
-
+res.json({message:"kullanici eklendi",users:db.data.users})
 })
 
 
 
-router.delete("/users",(req,res)=>{
-const {id}=req.body
-const sql="DELETE FROM users WHERE id = ?"
 
-db.run(sql,id,(err)=>{
-if(err)
-res.status(500).json({error:err.message})
-res.status(200).json({message:"kullanici silindi"})
+router.put("/",async (req,res)=>{
+const {email,name}=req.body
+const id=req.body.id
+await db.read()
+
+const user=db.data.users.find(u=>u.id==id)
+if(!user)
+return res.status(400).json({error:"kullanici bulunamadi"})
+
+if(name)user.name=name
+if(email)user.email=email
+
+await db.write()
+res.json({message:"kullanici guncellendi"})
 })
 
 
+
+router.delete("/",async (req,res)=>{
+const id=req.body.id
+await db.read()
+console.log(db.data.users)
+db.data.users=db.data.users.filter(x=>x.id!==id)
+db.write()
+res.json({message:"kullanici silindi"})
 })
 module.exports=router

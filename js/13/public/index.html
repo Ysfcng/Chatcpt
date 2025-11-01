@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>kullanici paneli</title>
+</head>
+<body>
+<form id="userForm">
+<input id="name" placeholder="ismini yaz" type="text" />
+<input type="email" id="email" placeholder="emailini  yaz"/>
+<button type="submit" id="submit">submit</button>
+</form>
+<ul id="userList">
+
+</ul>
+
+
+<script>
+let userList=document.querySelector("#userList")
+let userForm=document.querySelector("#userForm")
+
+
+async function getUsers(){
+const res=fetch("/users")
+const users=res.json()
+userList.innerHTML=users.map((u,i)=>{
+"<li>"+u.name+u.email+"</li>"
+
+}).join("")
+}
+
+
+userForm.addEventListener("submit",async (e)=>{
+e.preventDefault();
+const Name=document.querySelector("#name")
+const email=document.querySelector("#email")
+
+let res=await fetch("/users",{
+methods:"POST",
+headers:{"Content-Type":"applicatin/json"},
+body:JSON.stringify({Name,email})
+
+})
+
+let dat=await res.json()
+alert(dat.message||dat.error)
+getUsers()
+})
+
+</script>
+</body>
+</html>
