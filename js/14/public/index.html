@@ -1,0 +1,62 @@
+<html>
+<head></head>
+<body>
+<form id="form">
+<input id="name" type="text" placeholder="isim gir"/>
+<input type="email" id="email" placeholder="email gir"/>
+<button id="submit">submit</button>
+</form>
+
+<ul id="list"></ul>
+
+
+
+<script>
+let name = document.querySelector("#name")
+let email = document.querySelector("#email")
+let form = document.querySelector("#form")
+let ul=document.querySelector("#list")
+async function getUsers(){
+let res=await fetch("http://127.0.0.1:3000/users",{
+method:"GET"
+})
+
+let data = await res.json()
+list.innerHTML=data.map(x=>{
+return "<li>"+x.name+" "+x.email+
+"<button onclick='del('"+x["id"]+"')'>sil</button>"
++"<button onclick='update('"+x["id"]+"')'>guncelle</button>"
++"</li>"
+}).join("")
+}
+getUsers()
+async function del(id){
+let mail=email.value
+let user=name.value
+
+let res=await fetch("http://127.0.0.1:3000/users",{
+method:"DELETE",
+headers:{"Content-Type":"application/json"},
+body:{"id":id,"email":mail,"name":user}
+})
+
+let data=await res.json()
+alert(data.message||data.error)
+}
+
+async function update(id){
+let mail=email.value
+let user=name.value
+
+let res=await fetch("http://127.0.0.1:3000/users",{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+body:{"id":id,"name":user,"email":mail}
+})
+let data=await res.json()
+alert(data.message||data.error)
+
+}
+</script>
+</body>
+</html>
