@@ -27,6 +27,7 @@ await db.write()
 
 router.delete("/",async (req,res)=>{
 const {id}=req.body
+await db.read()
 
 if(!id&&id!=0){
 return res.status(400).json({error:"kullanici id zorunlu"})
@@ -34,10 +35,9 @@ return res.status(400).json({error:"kullanici id zorunlu"})
 if(!db.data.users.some(x=>x["id"]!=id))
 return res.status(400).json({error:"kullanici id hatali"})
 
-await db.read()
 db.data.users=db.data.users.filter((x,i)=>i!==id)
 await db.write()
-res.json(message="kullanici silindi")
+res.json({message:"kullanici silindi"})
 })
 
 router.put("/",async (req,res)=>{

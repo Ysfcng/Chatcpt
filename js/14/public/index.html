@@ -1,5 +1,7 @@
 <html>
-<head></head>
+<head>
+<meta id="Viewport" name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+</head>
 <body>
 <form id="form">
 <input id="name" type="text" placeholder="isim gir"/>
@@ -16,6 +18,20 @@ let name = document.querySelector("#name")
 let email = document.querySelector("#email")
 let form = document.querySelector("#form")
 let ul=document.querySelector("#list")
+
+form.addEventListener("submit",async (e)=>{
+e.preventDefault();
+let res=await fetch("http://127.0.0.1:3000/users",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({"name":name.value,"email":email.value})
+})
+
+let data=await res.json()
+alert(data.message||data.error)
+getUsers();
+})
+
 async function getUsers(){
 let res=await fetch("http://127.0.0.1:3000/users",{
 method:"GET"
@@ -33,6 +49,7 @@ ${x.name} ${x.email}
 }).join("")
 }
 getUsers()
+
 async function del(id){
 let mail=email.value
 let user=name.value
@@ -45,7 +62,9 @@ body:JSON.stringify({"id":id,"email":mail,"name":user})
 
 let data=await res.json()
 alert(data.message||data.error)
+getUsers()
 }
+
 
 async function update(id){
 let mail=email.value
@@ -59,6 +78,7 @@ body:JSON.stringify({"id":id,"name":user,"email":mail})
 let data=await res.json()
 alert(data.message||data.error)
 
+getUsers()
 }
 </script>
 </body>

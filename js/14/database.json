@@ -3,6 +3,11 @@
     {
       "name": "Yeni Yusuf",
       "email": "new@mail.com"
+    },
+    {
+      "id": 1,
+      "name": "New",
+      "email": "asd@gmail.com"
     }
   ]
 }

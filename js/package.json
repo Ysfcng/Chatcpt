@@ -8,5 +8,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "binutils": "^0.1.0",
+    "lowdb": "^7.0.1"
+  }
 }
