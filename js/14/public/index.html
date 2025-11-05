@@ -22,11 +22,14 @@ method:"GET"
 })
 
 let data = await res.json()
-list.innerHTML=data.map(x=>{
-return "<li>"+x.name+" "+x.email+
-"<button onclick='del('"+x["id"]+"')'>sil</button>"
-+"<button onclick='update('"+x["id"]+"')'>guncelle</button>"
-+"</li>"
+ul.innerHTML=data.map(x=>{
+return `
+<li>
+${x.name} ${x.email}
+<button onclick="del(${x.id})">sil</button>
+<button onclick="update(${x.id})">guncelle</button>
+</li>
+`;
 }).join("")
 }
 getUsers()
@@ -37,7 +40,7 @@ let user=name.value
 let res=await fetch("http://127.0.0.1:3000/users",{
 method:"DELETE",
 headers:{"Content-Type":"application/json"},
-body:{"id":id,"email":mail,"name":user}
+body:JSON.Stringify({"id":id,"email":mail,"name":user})
 })
 
 let data=await res.json()
@@ -51,7 +54,7 @@ let user=name.value
 let res=await fetch("http://127.0.0.1:3000/users",{
 method:"PUT",
 headers:{"Content-Type":"application/json"},
-body:{"id":id,"name":user,"email":mail}
+body:JSON.Stringify({"id":id,"name":user,"email":mail})
 })
 let data=await res.json()
 alert(data.message||data.error)
