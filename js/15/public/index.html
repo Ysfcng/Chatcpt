@@ -1,0 +1,121 @@
+<html>
+  <body>
+    <form id="search">
+      <input
+        type="text"
+        placeholder="isim veya email yaz"
+        id="searchQuery"
+      />
+      <button type="submit">ara</button>
+      <p id="searchResult"></p>
+    </form>
+
+    <form id="user">
+      <input type="text" id="name" placeholder="kullanici ismi gir" />
+      <input type="email" id="email" placeholder="emailini gir" />
+      <button type="submit">ekle</button>
+    </form>
+
+    <p id="userList"></p>
+
+    <script>
+      const find = document.querySelector("#search");
+      const add = document.querySelector("#user");
+      const searchResult = document.querySelector("#searchResult");
+      const nameInput = document.querySelector("#name");
+      const emailInput = document.querySelector("#email");
+      const searchQuery = document.querySelector("#searchQuery");
+      const userList = document.querySelector("#userList");
+
+      async function addUser() {
+        const res = await fetch("http://127.0.0.1:3000/users");
+        const data = await res.json();
+        userList.innerHTML = data
+          .map(
+            (x) => `
+          <div>${x.name} ${x.email}
+            <button onclick="removeUser('${x.id}')">sil</button>
+            <button onclick="updateUser('${x.id}')">güncelle</button>
+          </div>`
+          )
+          .join("");
+      }
+
+      async function updateUser(id) {
+        const res = await fetch("http://127.0.0.1:3000/users", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id,
+            email: emailInput.value,
+            name: nameInput.value,
+          }),
+        });
+        const data = await res.json();
+        alert(data.message || data.error);
+        addUser();
+      }
+
+      async function removeUser(id) {
+        const res = await fetch("http://127.0.0.1:3000/users", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        const data = await res.json();
+        alert(data.message || data.error);
+        addUser();
+      }
+
+      add.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const res = await fetch("http://127.0.0.1:3000/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user: nameInput.value,
+            email: emailInput.value,
+          }),
+        });
+        const data = await res.json();
+        alert(data.message || data.error);
+        addUser();
+      });
+
+      // ✅ Arama fonksiyonu
+      async function doSearch() {
+        const query = searchQuery.value.trim();
+        if (!query) {
+          searchResult.innerHTML = "";
+          return;
+        }
+
+          const res = await fetch("http://127.0.0.1:3000/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "searchQuery":query }),
+          });
+
+          if (!res.ok) {
+            throw new Error("Sunucu hatası");
+          }
+          const data = await res.json();
+          searchResult.innerHTML =  `<li>${data.name} ${data.email}</li>`
+      }
+
+      // ✅ 1️⃣ Android dahil her cihazda canlı arama (her yazışta)
+      searchQuery.addEventListener("input", () => {
+        doSearch();
+      });
+
+      // ✅ 2️⃣ Butonla da arama yapılabilsin
+      find.addEventListener("submit", (e) => {
+        e.preventDefault();
+        doSearch();
+      });
+
+      // ✅ Sayfa açıldığında kullanıcıları listele
+      addUser();
+    </script>
+  </body>
+</html>
