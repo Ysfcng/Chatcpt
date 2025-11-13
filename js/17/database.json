@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "id": "1763061479760",
+      "email": "yc977791@gmail.com",
+      "pass": {}
+    },
+    {
+      "id": "1763061551303",
+      "email": "yc166959@gmail.com",
+      "pass": {}
+    },
+    {
+      "id": "1763062688506",
+      "email": "a@sm",
+      "pass": {}
+    },
+    {
+      "id": "1763062755546",
+      "email": "b@c",
+      "pass": "$2b$10$FrljMt4CZv5GYRpsQ0d/L.xKzUlfTno4ldvvo2HO.jE5GqpGzsnqi"
+    }
+  ]
+}

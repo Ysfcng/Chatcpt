@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>giris yap</title>
+</head>
+<body>
+<form id="login">
+<input id="email" placeholder="email gir" required/>
+<input id="pass" placeholder="sifre gir" required/>
+<button type="submit">giris yap</button>
+</form>
+<div id="msg"></div>
+<script>
+let $=(el)=>document.querySelector(el)
+
+let email=$("#email")
+let form=$("#login")
+let pass=$("#pass")
+let msg=$("#msg")
+
+login.addEventListener("submit",async(e)=>{
+e.preventDefault();
+let res=await fetch("http://127.0.0.1:3000/auth/login",{
+"method":"POST",
+"headers":{"Content-Type":"application/json"},
+"body":JSON.stringify({"email":email.value,"pass":pass.value}),
+
+})
+
+let data=await res.json()
+alert(data)
+if(data.token){
+localStorage.setItem("token",data.token)
+msg.textContent="giris basarili"
+window.location.href="/index.html"
+}
+else{
+msg.textContent=data.error||"giris basarisiz"
+
+}
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>kayit ol</title>
+</head>
+<body>
+
+<form id="register">
+<input id="email" placeholder="email giriniz" type="email" required />
+<input id="pass1" placeholder="sifreyi gir" type="password" required />
+<input id="pass2" placeholder="sifre tekrar" required type="password" />
+<button type="submit">kayit ol</button >
+</form>
+
+<script>
+let $=(el)=>document.querySelector(el)
+
+let email=$("#email")
+let pass1=$("#pass1")
+let pass2=$("#pass2")
+let form=$("#register")
+
+form.addEventListener("submit",async (e)=>{
+e.preventDefault();
+alert(pass1.value==pass2.value)
+if(pass1.value==pass2.value&&pass1){
+let res=await fetch("http://127.0.0.1:3000/auth/register",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({"email":email.value,"pass":pass1.value})
+})
+
+let data=await res.json()
+alert(data.message||data.error)
+}
+else{
+console.log("lutfen tum alanlari doldurun")
+}
+})
+</script>
+</body>
+
+</html>

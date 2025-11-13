@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>ana sayfa</title>
+</head>
+<body>
+<h1>kullanicilar</h1>
+<button onclick="logout()">logout</button>
+<div id="userList"></div>
+<script>
+let $=(el)=>document.querySelector(el)
+let userList=$("#userList")
+let token=localStorage.getItem("token")
+if(!token){
+window.location.href="/login.html"
+}
+
+async function getUsers(){
+const res=await fetch("http://127.0.0.1:3000/users",{
+headers:{authorization:"Bearer "+token}
+})
+if(res.status==401||res.status==403){
+alert("oturum suresi dolmus")
+localStorage.removeItem("token")
+window.location.href="/login.html"
+return;
+}
+
+const users=await res.json();
+$("#userList").innerHTML=users.map(u=>{
+return `<li>${u.id} ${u.email}</li>`
+
+}).join("")
+}
+
+function logout(){
+localStorage.removeItem("token")
+window.location.href="/login.html"
+}
+getUsers()
+</script>
+</body>
+</html>
