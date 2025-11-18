@@ -1,0 +1,46 @@
+<html>
+<head><title>register</title></head>
+<body>
+<form id="register">
+<input id="name" type="text" placeholder="isim giriniz" required />
+<input id="email" type="email" placeholder="email giriniz"  required />
+<input id="password1" type="password" placeholder="sifre giriniz"  required />
+<input id="password2" type="password" placeholder="sifre tekrar" required />
+<button type="submit">kayit ol</button>
+</form>
+
+
+<script>
+let form=document.querySelector("#register")
+
+
+
+
+form.addEventListener("submit",async(e)=>{
+e.preventDefault();
+let email=document.querySelector("#email").value
+let name=document.querySelector("#name").value
+let pass1=document.querySelector("#password1").value
+let pass2=document.querySelector("#password2").value
+let res
+if(!name||!email||!pass1||!pass2)
+alert("tum kutular doldurulmalidir")
+
+if(pass1==pass2){
+ res=await fetch("http://127.0.0.1:3000/auth/register",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({"name":name,"email":email,"pass1":pass1})
+
+})
+let data=await res.json()
+alert(data.message||data.error)
+}
+else{
+alert("sifreler uyusmuyor")
+}
+})
+</script>
+
+</body>
+</html>

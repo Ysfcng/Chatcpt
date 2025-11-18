@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>kullanicilar</title>
+</head>
+<body>
+<h1>kullanicilar</h1>
+<button onclick="logout()">logout</button>
+<ul id="userList"></ul>
+
+
+<script>
+
+const token=window.localStorage.getItem("token")
+
+if(!token){
+window.location.href="http://127.0.0.1:3000/login.html"
+}
+
+
+async function getUsers(){
+let res=await fetch("http://127.0.0.1:3000/users",{
+headers:{authorization:"Bearer "+token}
+}
+if(res.status==401||res.status==403){
+alert("oturum suresi dolmus tekrar giris yapin")
+localStorage.removeItem("token")
+window.location.href="http://127.0.0.1:3000/login.html"
+}
+
+})
+
+const data=await res.json()
+document.querySelector("#userList").innerHTML=data.map(x=>{
+return `<li>${data.name} ${data.email}</li>`
+
+}).join("")
+}
+function logout(){
+localStorage.removeItem("token")
+window.location.href="/login.html"
+}
+</script>
+</body>
+</html>

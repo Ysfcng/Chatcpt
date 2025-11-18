@@ -1,0 +1,40 @@
+<html>
+<head><title>giris yap</title></head>
+<body>
+<form id="login">
+<input id="email" placeholder="emaili gir" required type="text"  />
+<input id="password" placeholder="sifre gir" type="password" />
+<button type="submit">login</button>
+</form>
+<p id="msg"></p>
+
+
+<script>
+const form=document.querySelector("#login")
+const msg=document.querySelector("#msg")
+let email=document.querySelector("#email")
+let password=document.querySelector("#password")
+
+
+form.addEventListener("submit",async(e)=>{
+e.preventDefault();
+let res=await fetch("http://127.0.0.1:3000/auth/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({"email":email.value,"password":password.value})
+})
+
+let data=await res.json()
+
+if(data.token){
+localStorage.setItem("token",data.token)
+msg.innerHTML="giris basarili"
+window.location.href="/index.html"
+}
+
+msg.innerHTML=data.error
+})
+</script>
+
+</body>
+</html>
