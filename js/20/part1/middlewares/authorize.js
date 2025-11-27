@@ -8,3 +8,4 @@ next();
 }
 
 }
+module.exports=authorize
