@@ -1,0 +1,8 @@
+::1 - - [02/Jan/2026:17:38:16 +0000] "POST /auth/register HTTP/1.1" 500 43 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:17:42:04 +0000] "POST /auth/register HTTP/1.1" 500 52 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:17:44:30 +0000] "POST /auth/register HTTP/1.1" 500 52 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:17:47:19 +0000] "POST /auth/register HTTP/1.1" 500 52 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:18:32:32 +0000] "POST /auth/register HTTP/1.1" 500 51 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:18:33:13 +0000] "POST /auth/register HTTP/1.1" 500 51 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:18:33:37 +0000] "POST /auth/register HTTP/1.1" 500 51 "-" "curl/8.17.0"
+::1 - - [02/Jan/2026:18:39:00 +0000] "POST /auth/register HTTP/1.1" 500 51 "-" "curl/8.17.0"
